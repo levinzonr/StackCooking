@@ -8,8 +8,8 @@ class QuestionResponce(
         val hasMore: Boolean,
         val quotaMax: Int,
         val quotaRemaining: Int
-) {
+        ) {
     override fun toString(): String {
-        return "QuestionResponce(items=${items.size}, hasMore=$hasMore, quotaMax=$quotaMax, quotaRemaining=$quotaRemaining)"
+        return "QuestionResponce(items=$items, hasMore=$hasMore, quotaMax=$quotaMax, quotaRemaining=$quotaRemaining)"
     }
 }

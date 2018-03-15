@@ -38,7 +38,7 @@ class StackClient  {
         }
     }
 
-    fun getQuestionsPage(): Observable<QuestionResponce> {
+    fun fetchQuestionsPage(): Observable<QuestionResponce> {
         return service.fetchQuestionsPage()
     }
 

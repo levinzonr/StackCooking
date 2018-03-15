@@ -11,7 +11,6 @@ import android.view.ViewGroup
 import cz.levinzonr.stackquestions.R
 import cz.levinzonr.stackquestions.model.QuestionResponce
 import cz.levinzonr.stackquestions.presenter.ListPresenter
-import cz.levinzonr.stackquestions.presenter.Presenter
 
 
 /**
@@ -29,7 +28,8 @@ class QuestionLIstFragment : Fragment(), ViewCallBacks<QuestionResponce> {
                               savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
         presenter = ListPresenter()
-        presenter.fetchQuestionsPage()
+        presenter.attachView(this)
+        presenter.getQuestionsPage()
         return inflater!!.inflate(R.layout.fragment_question_list, container, false)
     }
 
@@ -44,4 +44,10 @@ class QuestionLIstFragment : Fragment(), ViewCallBacks<QuestionResponce> {
     override fun onError() {
         Log.d(TAG, "on Error")
     }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        presenter.detachView()
+    }
+
 }// Required empty public constructor

@@ -26,10 +26,10 @@ class ListPresenter : Presenter<ViewCallBacks<QuestionResponce>>, Subscriber<Que
         this.view = view
     }
 
-    fun fetchQuestionsPage(){
+    fun getQuestionsPage(){
         subscription?.unsubscribe()
         view?.onLoadingStarted()
-        subscription = StackClient.instance().getQuestionsPage()
+        subscription = StackClient.instance().fetchQuestionsPage()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this)
