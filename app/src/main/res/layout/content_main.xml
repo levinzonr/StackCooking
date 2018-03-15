@@ -9,7 +9,7 @@
     tools:showIn="@layout/activity_main">
 
     <fragment
-        class="cz.levinzonr.stackquestions.screens.QuestionLIstFragment"
+        class="cz.levinzonr.stackquestions.screens.questionslist.QuestionLIstFragment"
         android:id="@+id/list_fragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
