@@ -9,15 +9,15 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ProgressBar
 
 import cz.levinzonr.stackquestions.R
+import cz.levinzonr.stackquestions.persistence.CacheProvider
+import cz.levinzonr.stackquestions.model.Question
 import cz.levinzonr.stackquestions.model.QuestionResponce
 import cz.levinzonr.stackquestions.presenter.ListPresenter
 import cz.levinzonr.stackquestions.screens.ViewCallBacks
 import cz.levinzonr.stackquestions.screens.viewutils.InfiniteScrollListener
 import cz.levinzonr.trendee.screens.artistslist.VerticalSpaceDecoration
-import kotlinx.android.synthetic.main.fragment_question_list.view.*
 
 
 /**
@@ -28,7 +28,6 @@ class QuestionListFragment : Fragment(), ViewCallBacks<QuestionResponce> {
     lateinit var presenter: ListPresenter
     lateinit var adapter: QuestionListAdapter
     lateinit var questionResponce: QuestionResponce
-
     lateinit var recyclerView: RecyclerView
 
     companion object {
@@ -46,9 +45,20 @@ class QuestionListFragment : Fragment(), ViewCallBacks<QuestionResponce> {
         initRecyclerView(recyclerView)
         presenter.attachView(this)
         presenter.getQuestionsPage(START_PAGE)
-
-
         return view
+    }
+
+    private fun getInfiniteScrollListener(layoutManager: LinearLayoutManager, page : Int = 1) : InfiniteScrollListener {
+        return object : InfiniteScrollListener(layoutManager, page) {
+            override fun loadNext(pageToLoad: Int) {
+                Log.d(TAG, "load next $pageToLoad")
+                if (questionResponce.hasMore) {
+                    presenter.getQuestionsPage(pageToLoad)
+                } else {
+                    Log.d(TAG, "End of the list")
+                }
+            }
+        }
     }
 
     private fun initRecyclerView(recyclerView: RecyclerView) {
@@ -56,16 +66,7 @@ class QuestionListFragment : Fragment(), ViewCallBacks<QuestionResponce> {
         recyclerView.addItemDecoration(VerticalSpaceDecoration())
         val layoutManager = LinearLayoutManager(context)
         recyclerView.layoutManager = layoutManager
-        recyclerView.addOnScrollListener(object : InfiniteScrollListener(layoutManager) {
-            override fun loadNext(pageToLoad: Int) {
-                Log.d(TAG, "load next $pageToLoad")
-                if (questionResponce.hasMore) {
-                   presenter.getQuestionsPage(pageToLoad)
-                } else {
-                    Log.d(TAG, "End of the list")
-                }
-            }
-        })
+        recyclerView.addOnScrollListener(getInfiniteScrollListener(layoutManager))
     }
 
     override fun onLoadingStarted() {
@@ -75,12 +76,30 @@ class QuestionListFragment : Fragment(), ViewCallBacks<QuestionResponce> {
         })
     }
 
+    override fun restoreFromCache(data: CacheProvider.CachedData) {
+        val manager = LinearLayoutManager(context)
+        val allItems = ArrayList<Question>()
+        for (item in data.items) {
+            allItems.addAll(item.items)
+        }
+        questionResponce = data.items.last()
+        recyclerView.apply {
+            clearOnScrollListeners()
+            layoutManager = manager
+            addOnScrollListener(getInfiniteScrollListener(manager, data.latstPage))
+        }
+        recyclerView.post {
+            adapter.setItems(allItems)
+        }
+        Log.d(TAG, "Restored from cache")
+    }
+
     override fun onLoadingFinished(result: QuestionResponce) {
         Log.d(TAG, "on Loading finished")
-        adapter.setItems(result.items)
         questionResponce = result
         recyclerView.post({
             adapter.isLoading = false
+            adapter.setItems(result.items)
         })    }
 
     override fun onError() {

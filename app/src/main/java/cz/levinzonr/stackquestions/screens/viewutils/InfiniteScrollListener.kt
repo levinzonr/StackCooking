@@ -7,12 +7,9 @@ import android.util.Log
 /**
  * Created by nomers on 3/16/18.
  */
-abstract class InfiniteScrollListener(val linearLayoutManager: LinearLayoutManager) : RecyclerView.OnScrollListener() {
-
-    var currentPage: Int = 1
+abstract class InfiniteScrollListener(val linearLayoutManager: LinearLayoutManager, var currentPage: Int = 1) : RecyclerView.OnScrollListener(){
     var isLoading: Boolean = false
     var previousItemCount = 10
-
 
     companion object {
         const val TAG = "InfiniteScrollListener"
