@@ -8,7 +8,7 @@ import java.util.*
 class Question(
         val questionId: Int,
         val title: String,
-        val answersCount: Int,
+        val answerCount: Int,
         val isAnswered: Boolean,
         val link: String,
         val tags: Array<String>,
@@ -31,7 +31,7 @@ class Question(
     }
 
     override fun toString(): String {
-        return "Question(questionId=$questionId, title='$title', answersCount=$answersCount, " +
+        return "Question(questionId=$questionId, title='$title', answerCount=$answerCount, " +
                 "isAnswered=$isAnswered, link='$link', tags=${Arrays.toString(tags)}, " +
                 "viewCount=$viewCount, owner=$owner)"
     }

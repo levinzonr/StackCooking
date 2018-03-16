@@ -8,4 +8,7 @@
     <string name="sample_name">Anonimous</string>
     <string name="question_score">score</string>
     <string name="question_times_viewed">times viewed</string>
+    <string name="question_answered">Answered</string>
+    <string name="question_times_answered">answers</string>
+    <string name="question_not_ansewered">Not Answered</string>
 </resources>
