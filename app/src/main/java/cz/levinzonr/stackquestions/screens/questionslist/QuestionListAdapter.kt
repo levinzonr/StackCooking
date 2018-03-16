@@ -1,6 +1,7 @@
 package cz.levinzonr.stackquestions.screens.questionslist
 
 import android.content.Context
+import android.support.v4.content.ContextCompat
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -41,6 +42,20 @@ class QuestionListAdapter(private val context: Context) : RecyclerView.Adapter<R
                 view.question_author_name.text = question.owner.displayName
                 Picasso.get().load(question.owner.profileImage).into(view.question_author_image)
             }
+            if (question.isAnswered) {
+                view.question_status_icon.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_done_black_24dp))
+                view.question_status_icon.setColorFilter(ContextCompat.getColor(context, R.color.colorAccent))
+                view.question_status_label.text = context.getString(R.string.question_answered)
+                view.question_status_label.setTextColor(ContextCompat.getColor(context, R.color.colorAccent))
+
+            } else {
+                view.question_status_icon.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_close_black_24dp))
+                view.question_status_icon.setColorFilter(ContextCompat.getColor(context, R.color.colorPrimaryDark))
+                view.question_status_label.text = context.getString(R.string.question_not_ansewered)
+                view.question_status_label.setTextColor(ContextCompat.getColor(context, R.color.colorPrimaryDark))
+            }
+            view.question_times_answered.text = question.answerCount.toString()
+
         }
     }
 
