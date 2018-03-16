@@ -2,6 +2,7 @@ package cz.levinzonr.stackquestions.api
 
 import cz.levinzonr.stackquestions.model.QuestionResponce
 import retrofit2.http.GET
+import retrofit2.http.Query
 import rx.Observable
 
 /**
@@ -9,7 +10,7 @@ import rx.Observable
  */
 interface StackApi {
 
-    @GET("questions?filter=withbody&order=desc&sort=creation&site=cooking&pagesize=5&page=1")
-    fun fetchQuestionsPage() : Observable<QuestionResponce>
+    @GET("questions?filter=withbody&order=desc&sort=creation&site=cooking&pagesize=10")
+    fun fetchQuestionsPage(@Query("page") page: Int) : Observable<QuestionResponce>
 
 }
