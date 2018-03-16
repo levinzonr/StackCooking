@@ -14,6 +14,7 @@ import cz.levinzonr.stackquestions.R
 import cz.levinzonr.stackquestions.model.QuestionResponce
 import cz.levinzonr.stackquestions.presenter.ListPresenter
 import cz.levinzonr.stackquestions.screens.ViewCallBacks
+import cz.levinzonr.stackquestions.screens.viewutils.InfiniteScrollListener
 import cz.levinzonr.trendee.screens.artistslist.VerticalSpaceDecoration
 
 
@@ -27,6 +28,7 @@ class QuestionLIstFragment : Fragment(), ViewCallBacks<QuestionResponce> {
 
     companion object {
         const val TAG = "QuestionsListFragment"
+        const val START_PAGE = 1
     }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
@@ -37,14 +39,21 @@ class QuestionLIstFragment : Fragment(), ViewCallBacks<QuestionResponce> {
         val view = inflater!!.inflate(R.layout.fragment_question_list, container, false)
         initRecyclerView(view.findViewById(R.id.recycler_view))
         presenter.attachView(this)
-        presenter.getQuestionsPage()
+        presenter.getQuestionsPage(START_PAGE)
         return view
     }
 
-    fun initRecyclerView(recyclerView: RecyclerView) {
+    private fun initRecyclerView(recyclerView: RecyclerView) {
         recyclerView.adapter = adapter
         recyclerView.addItemDecoration(VerticalSpaceDecoration())
-        recyclerView.layoutManager = LinearLayoutManager(context)
+        val layoutManager = LinearLayoutManager(context)
+        recyclerView.layoutManager = layoutManager
+        recyclerView.addOnScrollListener(object : InfiniteScrollListener(layoutManager) {
+            override fun loadNext(pageToLoad: Int) {
+                Log.d(TAG, "load next $pageToLoad")
+                presenter.getQuestionsPage(pageToLoad)
+            }
+        })
     }
 
     override fun onLoadingStarted() {
