@@ -5,20 +5,35 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ProgressBar
 import com.squareup.picasso.Picasso
 import cz.levinzonr.stackquestions.R
 import cz.levinzonr.stackquestions.model.Question
+import kotlinx.android.synthetic.main.item_loading_indicator.view.*
 import kotlinx.android.synthetic.main.item_question.view.*
 
 /**
  * Created by nomers on 3/15/18.
  */
-class QuestionListAdapter(private val context: Context) : RecyclerView.Adapter<QuestionListAdapter.ViewHolder>(){
-    private  val layoutInflater: LayoutInflater = LayoutInflater.from(context)
-    private val items : ArrayList<Question> = ArrayList()
+class QuestionListAdapter(private val context: Context) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+    private val layoutInflater: LayoutInflater = LayoutInflater.from(context)
+    private val items: ArrayList<Question> = ArrayList()
+    var isLoading: Boolean = false
+    set(value) {
+        field = value
+        notifyDataSetChanged()
+    }
 
-    inner class ViewHolder(val view : View) : RecyclerView.ViewHolder(view) {
+    companion object {
+        const val VIEW_TYPE_LOADER = 1
+        const val VIEW_TYPE_ITEM = 2
+    }
 
+    inner class LoaderHolder(view: View) : RecyclerView.ViewHolder(view) {
+        val progressBar: ProgressBar = view.progressbar
+    }
+
+    inner class ViewHolder(val view: View) : RecyclerView.ViewHolder(view) {
         fun bindView(question: Question) {
             view.question_title.text = question.title
             view.question_times_viewed.text = question.viewCount.toString()
@@ -29,8 +44,13 @@ class QuestionListAdapter(private val context: Context) : RecyclerView.Adapter<Q
         }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): ViewHolder {
-        return ViewHolder(layoutInflater.inflate(R.layout.item_question, parent, false))
+    override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): RecyclerView.ViewHolder {
+        return when(viewType) {
+            VIEW_TYPE_ITEM ->  ViewHolder(layoutInflater.inflate(R.layout.item_question, parent, false))
+            VIEW_TYPE_LOADER -> LoaderHolder(layoutInflater.inflate(R.layout.item_loading_indicator, parent, false))
+            else -> throw IllegalArgumentException()
+
+        }
     }
 
     fun setItems(list: List<Question>) {
@@ -39,10 +59,25 @@ class QuestionListAdapter(private val context: Context) : RecyclerView.Adapter<Q
     }
 
     override fun getItemCount(): Int {
-        return items.size
+        return items.size + 1
     }
 
-    override fun onBindViewHolder(holder: ViewHolder?, position: Int) {
-        holder?.bindView(items[position])
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder?, position: Int) {
+        (holder as? ViewHolder)?.bindView(items[position])
+        if (holder is LoaderHolder) {
+            if (isLoading)
+                holder.progressBar.visibility = View.VISIBLE
+            else
+                holder.progressBar.visibility = View.INVISIBLE
+        }
+
+
+    }
+
+    override fun getItemViewType(position: Int): Int {
+        if (position >= items.size) {
+            return VIEW_TYPE_LOADER
+        }
+        return VIEW_TYPE_ITEM
     }
 }

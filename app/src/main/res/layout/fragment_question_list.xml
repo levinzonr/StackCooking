@@ -1,8 +1,8 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" tools:context="cz.levinzonr.stackquestions.screens.questionslist.QuestionLIstFragment">
+    android:layout_height="match_parent"
+    tools:context="cz.levinzonr.stackquestions.screens.questionslist.QuestionListFragment">
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycler_view"
@@ -11,10 +11,4 @@
 
     </android.support.v7.widget.RecyclerView>
 
-    <ProgressBar
-        android:visibility="visible"
-        android:id="@+id/progress_bar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
-</LinearLayout>
+</RelativeLayout>
