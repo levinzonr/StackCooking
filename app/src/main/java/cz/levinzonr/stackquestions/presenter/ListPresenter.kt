@@ -2,14 +2,13 @@ package cz.levinzonr.stackquestions.presenter
 
 import android.util.Log
 import cz.levinzonr.stackquestions.MyApplication
-import cz.levinzonr.stackquestions.api.StackClient
+import cz.levinzonr.stackquestions.persistence.CacheProvider
+import cz.levinzonr.stackquestions.persistence.StackClient
 import cz.levinzonr.stackquestions.model.QuestionResponce
-import cz.levinzonr.stackquestions.screens.ViewCallBacks
 import cz.levinzonr.stackquestions.screens.questionslist.QuestionListFragment
 import rx.Subscriber
 import rx.Subscription
 import rx.android.schedulers.AndroidSchedulers
-import rx.schedulers.Schedulers
 
 /**
  * Created by nomers on 3/15/18.
@@ -31,6 +30,18 @@ class ListPresenter : Presenter<QuestionListFragment> {
     fun getQuestionsPage(pageToLoad: Int){
         subscription?.unsubscribe()
         val app = MyApplication.fromContext(view!!.context)
+        val cache = CacheProvider(view!!.context)
+
+        if (cache.cachedData != null && cache.cachedData!!.latstPage >= pageToLoad) {
+            if (!cache.timeToUpdate(System.currentTimeMillis())) {
+                Log.d(TAG, "restoreFromCache")
+                view?.restoreFromCache(cache.cachedData!!)
+                return
+            }
+            Log.d(TAG, "Outdate cache")
+            cache.clear()
+        }
+
         view?.onLoadingStarted()
         subscription = StackClient.instance().fetchQuestionsPage(pageToLoad)
                 .subscribeOn(app.defaultScheduler())
@@ -39,6 +50,7 @@ class ListPresenter : Presenter<QuestionListFragment> {
                     override fun onNext(result: QuestionResponce?) {
                         if (result != null) {
                             Log.d(TAG, "Loading succes: $result")
+                            cache.updateCache(pageToLoad, result)
                             item = result
                         } else Log.d(TAG, "Result null")
                     }

@@ -1,4 +1,4 @@
-package cz.levinzonr.stackquestions.api
+package cz.levinzonr.stackquestions.persistence
 
 import com.google.gson.FieldNamingPolicy
 import com.google.gson.Gson
