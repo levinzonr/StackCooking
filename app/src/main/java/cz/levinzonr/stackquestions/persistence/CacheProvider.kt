@@ -1,9 +1,8 @@
-package cz.levinzonr.stackquestions.api
+package cz.levinzonr.stackquestions.persistence
 
+import android.app.AlarmManager
 import android.content.Context
-import android.util.Log
 import com.google.gson.Gson
-import cz.levinzonr.stackquestions.model.Question
 import cz.levinzonr.stackquestions.model.QuestionResponce
 import java.io.File
 
@@ -33,8 +32,27 @@ class CacheProvider(val context: Context) {
             var items: ArrayList<QuestionResponce>
     )
 
+    fun timeToUpdate(time: Long) : Boolean {
+        if (cachedData !=null) {
+            var t = time - cachedData!!.lastUpdated
+            if (t >= AlarmManager.INTERVAL_FIFTEEN_MINUTES) {
+                return true
+            }
+        }
+        if (cachedData == null)
+            return true
 
-    fun writePage(page: Int, response:QuestionResponce) {
+        return false
+    }
+
+    fun clear() {
+        val file = File(dir, FILE_NAME)
+        if (file.exists()) {
+            file.delete()
+        }
+    }
+
+    fun updateCache(page: Int, response:QuestionResponce) {
         val file = File(dir, FILE_NAME)
         if (!file.exists()) {
             val list = ArrayList<QuestionResponce>()

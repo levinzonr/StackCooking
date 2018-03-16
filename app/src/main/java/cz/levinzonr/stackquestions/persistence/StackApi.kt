@@ -1,4 +1,4 @@
-package cz.levinzonr.stackquestions.api
+package cz.levinzonr.stackquestions.persistence
 
 import cz.levinzonr.stackquestions.model.QuestionResponce
 import retrofit2.http.GET
