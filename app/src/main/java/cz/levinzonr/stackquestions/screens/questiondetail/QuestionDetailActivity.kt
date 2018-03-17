@@ -25,8 +25,11 @@ class QuestionDetailActivity : AppCompatActivity() {
 
     companion object {
 
+        private const val EXTRA_QUESTION = "ExtraQuestion"
+
         fun startAsIntent(context: Context, question: Question) {
             val intent = Intent(context, QuestionDetailActivity::class.java)
+            intent.putExtra(EXTRA_QUESTION, question)
             context.startActivity(intent)
         }
 
