@@ -16,11 +16,24 @@ class QuestionDetailActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_question_detail)
         setSupportActionBar(toolbar)
+
+        mountDetailFragment(intent.getParcelableExtra(EXTRA_QUESTION))
+
+    }
+
+    private fun mountDetailFragment(question: Question) {
+        val fm = supportFragmentManager
+        if (fm.findFragmentById(R.id.container) == null) {
+            fm.beginTransaction()
+                    .replace(R.id.container, QuestionDetailFragment.newInstance(question))
+                    .commit()
+        }
     }
 
     companion object {
 
         private const val EXTRA_QUESTION = "ExtraQuestion"
+        private const val TAG = "QuestionDetailActivity"
 
         fun startAsIntent(context: Context, question: Question) {
             val intent = Intent(context, QuestionDetailActivity::class.java)
