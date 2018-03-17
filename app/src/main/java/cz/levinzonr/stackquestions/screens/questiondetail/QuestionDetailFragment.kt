@@ -1,7 +1,6 @@
 package cz.levinzonr.stackquestions.screens.questiondetail
 
 
-import android.app.Application
 import android.content.Intent
 import android.net.Uri
 import android.os.Build
@@ -9,17 +8,12 @@ import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.text.Html
 import android.text.Spanned
-import android.util.Xml
 import android.view.*
-import android.webkit.MimeTypeMap
-import android.widget.Toast
 import com.squareup.picasso.Picasso
-
 import cz.levinzonr.stackquestions.R
 import cz.levinzonr.stackquestions.model.Question
 import kotlinx.android.synthetic.main.fragment_question_detail.*
-import kotlinx.android.synthetic.main.item_question.*
-import java.net.Proxy
+
 
 
 /**
