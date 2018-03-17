@@ -1,6 +1,7 @@
 package cz.levinzonr.stackquestions.screens.questionslist
 
 
+import android.content.Context
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
@@ -23,12 +24,17 @@ import cz.levinzonr.trendee.screens.artistslist.VerticalSpaceDecoration
 /**
  * A simple [Fragment] subclass.
  */
-class QuestionListFragment : Fragment(), ViewCallBacks<QuestionResponce> {
+class QuestionListFragment : Fragment(), ViewCallBacks<QuestionResponce>, QuestionListAdapter.ItemClickListener{
 
     lateinit var presenter: ListPresenter
     lateinit var adapter: QuestionListAdapter
     lateinit var questionResponce: QuestionResponce
     lateinit var recyclerView: RecyclerView
+    lateinit var listener: OnListFragmentInteractionListener
+
+    interface OnListFragmentInteractionListener {
+        fun onQuestionSelected(question: Question)
+    }
 
     companion object {
         const val TAG = "QuestionsListFragment"
@@ -39,13 +45,22 @@ class QuestionListFragment : Fragment(), ViewCallBacks<QuestionResponce> {
                               savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
         presenter = ListPresenter()
-        adapter = QuestionListAdapter(context)
+        adapter = QuestionListAdapter(context, this)
         val view = inflater!!.inflate(R.layout.fragment_question_list, container, false)
         recyclerView = view.findViewById(R.id.recycler_view)
         initRecyclerView(recyclerView)
         presenter.attachView(this)
         presenter.getQuestionsPage(START_PAGE)
         return view
+    }
+
+    override fun onAttach(context: Context?) {
+        super.onAttach(context)
+        listener = context as OnListFragmentInteractionListener
+    }
+
+    override fun onItemSelected(question: Question) {
+        listener.onQuestionSelected(question)
     }
 
     private fun getInfiniteScrollListener(layoutManager: LinearLayoutManager, page : Int = 1) : InfiniteScrollListener {

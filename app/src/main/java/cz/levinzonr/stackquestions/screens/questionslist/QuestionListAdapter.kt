@@ -16,13 +16,17 @@ import kotlinx.android.synthetic.main.item_question.view.*
 /**
  * Created by nomers on 3/15/18.
  */
-class QuestionListAdapter(private val context: Context) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class QuestionListAdapter(private val context: Context, private val listener: ItemClickListener) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private val layoutInflater: LayoutInflater = LayoutInflater.from(context)
     private val items: ArrayList<Question> = ArrayList()
     var isLoading: Boolean = false
     set(value) {
         field = value
         notifyDataSetChanged()
+    }
+
+    interface ItemClickListener {
+        fun onItemSelected(question: Question)
     }
 
     companion object {
@@ -36,6 +40,11 @@ class QuestionListAdapter(private val context: Context) : RecyclerView.Adapter<R
 
     inner class ViewHolder(val view: View) : RecyclerView.ViewHolder(view) {
         fun bindView(question: Question) {
+
+            view.setOnClickListener {
+                listener.onItemSelected(question)
+            }
+
             view.question_title.text = question.title
             view.question_times_viewed.text = question.viewCount.toString()
             if (question.owner != null) {

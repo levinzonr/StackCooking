@@ -6,10 +6,13 @@ import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
 import cz.levinzonr.stackquestions.R
+import cz.levinzonr.stackquestions.model.Question
+import cz.levinzonr.stackquestions.screens.questiondetail.QuestionDetailActivity
+import cz.levinzonr.stackquestions.screens.questionslist.QuestionListFragment
 
 import kotlinx.android.synthetic.main.activity_main.*
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), QuestionListFragment.OnListFragmentInteractionListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,5 +34,9 @@ class MainActivity : AppCompatActivity() {
             R.id.action_settings -> true
             else -> super.onOptionsItemSelected(item)
         }
+    }
+
+    override fun onQuestionSelected(question: Question) {
+        QuestionDetailActivity.startAsIntent(this, question)
     }
 }
