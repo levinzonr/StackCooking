@@ -53,7 +53,9 @@ class ListPresenter : Presenter<QuestionListFragment> {
                     override fun onNext(result: QuestionResponce?) {
                         if (result != null) {
                             Log.d(TAG, "Loading succes: $result")
-                            cache.updateCache(pageToLoad, result)
+                            Thread({
+                                cache.updateCache(pageToLoad, result)
+                            })
                             item = result
                         } else Log.d(TAG, "Result null")
                     }

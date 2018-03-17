@@ -10,6 +10,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 
 import cz.levinzonr.stackquestions.R
 import cz.levinzonr.stackquestions.persistence.CacheProvider
@@ -67,7 +68,13 @@ class QuestionListFragment : Fragment(), ViewCallBacks<QuestionResponce>,
         listener.onQuestionSelected(question)
     }
 
-
+    override fun onRepeatButtonClicked() {
+        presenter.getQuestionsPage(scrollListener.currentPage)
+        recyclerView.post {
+            adapter.error = false
+        }
+        Toast.makeText(context, "Repeatin..${scrollListener.currentPage}", Toast.LENGTH_SHORT).show()
+    }
 
     private fun initRecyclerView(recyclerView: RecyclerView) {
         recyclerView.adapter = adapter
@@ -84,6 +91,7 @@ class QuestionListFragment : Fragment(), ViewCallBacks<QuestionResponce>,
             presenter.getQuestionsPage(pageToLoad)
         } else {
             Log.d(TAG, "End of the list")
+            Toast.makeText(context, "End of the list", Toast.LENGTH_SHORT).show()
         }
 
     }
@@ -106,6 +114,7 @@ class QuestionListFragment : Fragment(), ViewCallBacks<QuestionResponce>,
             adapter.setItems(allItems)
         }
         Log.d(TAG, "Restored from cache")
+        Toast.makeText(context, "${data.latstPage} pages restored from cache", Toast.LENGTH_SHORT).show()
     }
 
     override fun onLoadingFinished(result: QuestionResponce) {
@@ -113,12 +122,16 @@ class QuestionListFragment : Fragment(), ViewCallBacks<QuestionResponce>,
         questionResponce = result
         recyclerView.post({
             adapter.isLoading = false
+            adapter.error = false
             adapter.setItems(result.items)
         })    }
 
     override fun onError() {
         Log.d(TAG, "on Error")
-        adapter.isLoading = false
+        recyclerView.post {
+            adapter.isLoading = false
+            adapter.error = true
+        }
     }
 
     override fun onDestroy() {

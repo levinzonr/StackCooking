@@ -12,7 +12,7 @@ class InfiniteScrollListener(
         val linearLayoutManager: LinearLayoutManager) : RecyclerView.OnScrollListener(){
     var isLoading: Boolean = false
     var currentPage: Int = 1
-    var previousItemCount = 10
+    var previousItemCount = 5
 
 
     interface InfiniteScrollCallbacks {
@@ -21,6 +21,7 @@ class InfiniteScrollListener(
 
     companion object {
         const val TAG = "InfiniteScrollListener"
+        const val STATIC_ELEMENTS_CNT = 2
     }
 
     override fun onScrolled(recyclerView: RecyclerView?, dx: Int, dy: Int) {
@@ -28,7 +29,8 @@ class InfiniteScrollListener(
         val totalItemsCount = linearLayoutManager.itemCount
         val lastVisibleItem = linearLayoutManager.findLastVisibleItemPosition()
 
-        if (!isLoading && totalItemsCount == lastVisibleItem + 1 && totalItemsCount != 1) {
+        if (!isLoading && totalItemsCount <= lastVisibleItem + 4
+                && totalItemsCount != STATIC_ELEMENTS_CNT) {
             currentPage ++
             Log.d(TAG, "-->LoadTime? $currentPage")
             isLoading = true

@@ -17,4 +17,6 @@
     <string name="action_share">Share</string>
     <string name="share_msg">Share with</string>
     <string name="question_empty">No question selected</string>
+    <string name="error_message">An Error has occured</string>
+    <string name="error_button_repeat">Try again</string>
 </resources>

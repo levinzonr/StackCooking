@@ -10,6 +10,7 @@ import android.widget.ProgressBar
 import com.squareup.picasso.Picasso
 import cz.levinzonr.stackquestions.R
 import cz.levinzonr.stackquestions.model.Question
+import kotlinx.android.synthetic.main.item_error.view.*
 import kotlinx.android.synthetic.main.item_loading_indicator.view.*
 import kotlinx.android.synthetic.main.item_question.view.*
 
@@ -19,6 +20,13 @@ import kotlinx.android.synthetic.main.item_question.view.*
 class QuestionListAdapter(private val context: Context, private val listener: ItemClickListener) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private val layoutInflater: LayoutInflater = LayoutInflater.from(context)
     private val items: ArrayList<Question> = ArrayList()
+
+    var error: Boolean = false
+    set(value){
+        field = value
+        notifyDataSetChanged()
+    }
+
     var isLoading: Boolean = false
     set(value) {
         field = value
@@ -27,11 +35,22 @@ class QuestionListAdapter(private val context: Context, private val listener: It
 
     interface ItemClickListener {
         fun onItemSelected(question: Question)
+        fun onRepeatButtonClicked()
     }
 
     companion object {
         const val VIEW_TYPE_LOADER = 1
         const val VIEW_TYPE_ITEM = 2
+        const val VIEW_TYPE_ERROR = 3
+    }
+
+    inner class ErrorHolder(val view: View) : RecyclerView.ViewHolder(view) {
+
+        init {
+            view.button_repeat.setOnClickListener({
+                listener.onRepeatButtonClicked()
+            })
+        }
     }
 
     inner class LoaderHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -68,6 +87,7 @@ class QuestionListAdapter(private val context: Context, private val listener: It
         return when(viewType) {
             VIEW_TYPE_ITEM ->  ViewHolder(layoutInflater.inflate(R.layout.item_question, parent, false))
             VIEW_TYPE_LOADER -> LoaderHolder(layoutInflater.inflate(R.layout.item_loading_indicator, parent, false))
+            VIEW_TYPE_ERROR -> ErrorHolder(layoutInflater.inflate(R.layout.item_error, parent, false))
             else -> throw IllegalArgumentException()
 
         }
@@ -79,7 +99,7 @@ class QuestionListAdapter(private val context: Context, private val listener: It
     }
 
     override fun getItemCount(): Int {
-        return items.size + 1
+        return items.size + 2
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder?, position: Int) {
@@ -87,16 +107,27 @@ class QuestionListAdapter(private val context: Context, private val listener: It
         if (holder is LoaderHolder) {
             if (isLoading)
                 holder.progressBar.visibility = View.VISIBLE
+
             else
-                holder.progressBar.visibility = View.INVISIBLE
+                holder.progressBar.visibility = View.GONE
         }
+        if (holder is ErrorHolder) {
+            if (error) {
+                holder.view.visibility = View.VISIBLE
+            } else {
+                holder.view.visibility = View.GONE
+            }
+        }
+
 
 
     }
 
     override fun getItemViewType(position: Int): Int {
-        if (position >= items.size) {
+        if (position == items.size) {
             return VIEW_TYPE_LOADER
+        } else if (position == items.size + 1) {
+            return VIEW_TYPE_ERROR
         }
         return VIEW_TYPE_ITEM
     }

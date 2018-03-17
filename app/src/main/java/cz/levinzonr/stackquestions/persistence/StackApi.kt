@@ -10,7 +10,7 @@ import rx.Observable
  */
 interface StackApi {
 
-    @GET("questions?filter=withbody&order=desc&sort=creation&site=cooking&pagesize=10")
+    @GET("questions?filter=withbody&order=desc&sort=creation&site=cooking&pagesize=5")
     fun fetchQuestionsPage(@Query("page") page: Int) : Observable<QuestionResponce>
 
 }
