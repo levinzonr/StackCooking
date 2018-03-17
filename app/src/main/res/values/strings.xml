@@ -16,4 +16,5 @@
     <string name="action_open_in_browser">Open in browser</string>
     <string name="action_share">Share</string>
     <string name="share_msg">Share with</string>
+    <string name="question_empty">No question selected</string>
 </resources>
