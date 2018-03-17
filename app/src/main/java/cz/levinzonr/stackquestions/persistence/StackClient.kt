@@ -23,7 +23,7 @@ class StackClient  {
             .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
             .build()
 
-    val service : StackApi = retrofit.create(StackApi::class.java)
+    private val service : StackApi = retrofit.create(StackApi::class.java)
 
     companion object {
         const val ROOT_URL = "https://api.stackexchange.com/2.2/"

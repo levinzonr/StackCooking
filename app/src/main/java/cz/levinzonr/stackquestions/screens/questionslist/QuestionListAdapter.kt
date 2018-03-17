@@ -52,16 +52,12 @@ class QuestionListAdapter(private val context: Context, private val listener: It
                 Picasso.get().load(question.owner.profileImage).into(view.question_author_image)
             }
             if (question.isAnswered) {
-                view.question_status_icon.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_done_black_24dp))
-                view.question_status_icon.setColorFilter(ContextCompat.getColor(context, R.color.colorAccent))
-                view.question_status_label.text = context.getString(R.string.question_answered)
-                view.question_status_label.setTextColor(ContextCompat.getColor(context, R.color.colorAccent))
+              view.question_status_label.visibility = View.VISIBLE
+              view.question_status_icon.visibility = View.VISIBLE
 
             } else {
-                view.question_status_icon.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ic_close_black_24dp))
-                view.question_status_icon.setColorFilter(ContextCompat.getColor(context, R.color.colorPrimaryDark))
-                view.question_status_label.text = context.getString(R.string.question_not_ansewered)
-                view.question_status_label.setTextColor(ContextCompat.getColor(context, R.color.colorPrimaryDark))
+                view.question_status_label.visibility = View.INVISIBLE
+                view.question_status_icon.visibility = View.INVISIBLE
             }
             view.question_times_answered.text = question.answerCount.toString()
 

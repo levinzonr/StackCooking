@@ -31,6 +31,9 @@ class ListPresenter : Presenter<QuestionListFragment> {
         subscription?.unsubscribe()
         val app = MyApplication.fromContext(view!!.context)
         val cache = CacheProvider(view!!.context)
+        if (cache.cachedData != null) {
+            Log.d(TAG, cache.cachedData.toString())
+        }
 
         if (cache.cachedData != null && cache.cachedData!!.latstPage >= pageToLoad) {
             if (!cache.timeToUpdate(System.currentTimeMillis())) {
@@ -38,7 +41,7 @@ class ListPresenter : Presenter<QuestionListFragment> {
                 view?.restoreFromCache(cache.cachedData!!)
                 return
             }
-            Log.d(TAG, "Outdate cache")
+            Log.d(TAG, "Outdated cache")
             cache.clear()
         }
 

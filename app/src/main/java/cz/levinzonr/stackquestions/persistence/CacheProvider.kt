@@ -5,6 +5,7 @@ import android.content.Context
 import com.google.gson.Gson
 import cz.levinzonr.stackquestions.model.QuestionResponce
 import java.io.File
+import java.util.*
 
 /**
  * Created by nomers on 3/16/18.
@@ -30,12 +31,15 @@ class CacheProvider(val context: Context) {
             var lastUpdated: Long,
             var latstPage: Int,
             var items: ArrayList<QuestionResponce>
-    )
+    ) {
+        override fun toString(): String {
+            return "CachedData(lastUpdated=${Date(lastUpdated)}, latstPage=$latstPage, items=$items)"
+        }
+    }
 
     fun timeToUpdate(time: Long) : Boolean {
         if (cachedData !=null) {
-            var t = time - cachedData!!.lastUpdated
-            if (t >= AlarmManager.INTERVAL_FIFTEEN_MINUTES) {
+            if (time - cachedData!!.lastUpdated >= AlarmManager.INTERVAL_FIFTEEN_MINUTES) {
                 return true
             }
         }
@@ -67,11 +71,9 @@ class CacheProvider(val context: Context) {
         file.writeBytes(json.toByteArray())
     }
 
-    fun getPage(page: Int): QuestionResponce {
-        val file = File(dir.path, page.toString())
-        val json = String(file.readBytes())
-        val responce = gson.fromJson(json, QuestionResponce::class.java)
-        return responce
+    override fun toString(): String {
+        return "CacheProvider(cachedData=$cachedData)"
     }
+
 
 }
