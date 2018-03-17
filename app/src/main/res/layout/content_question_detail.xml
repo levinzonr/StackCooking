@@ -8,4 +8,12 @@
     tools:context="cz.levinzonr.stackquestions.screens.questiondetail.QuestionDetailActivity"
     tools:showIn="@layout/activity_question_detail">
 
+
+    <fragment
+        android:id="@+id/detail_fragment"
+        class="cz.levinzonr.stackquestions.screens.questiondetail.QuestionDetailFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        />
+
 </android.support.constraint.ConstraintLayout>
