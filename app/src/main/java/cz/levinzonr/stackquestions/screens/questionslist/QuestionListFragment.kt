@@ -1,6 +1,7 @@
 package cz.levinzonr.stackquestions.screens.questionslist
 
 
+import android.app.AlertDialog
 import android.content.Context
 import android.os.Bundle
 import android.support.v4.app.Fragment
@@ -55,7 +56,6 @@ class QuestionListFragment : Fragment(), ViewCallBacks<QuestionResponce>,
         recyclerView = view.findViewById(R.id.recycler_view)
         initRecyclerView(recyclerView)
         presenter.attachView(this)
-        presenter.getQuestionsPage(START_PAGE)
         return view
     }
 
@@ -87,7 +87,7 @@ class QuestionListFragment : Fragment(), ViewCallBacks<QuestionResponce>,
 
     override fun onLoadMore(pageToLoad: Int) {
         Log.d(TAG, "load next $pageToLoad")
-        if (questionResponce.hasMore) {
+        if (pageToLoad == START_PAGE || questionResponce.hasMore) {
             presenter.getQuestionsPage(pageToLoad)
         } else {
             Log.d(TAG, "End of the list")
@@ -104,13 +104,13 @@ class QuestionListFragment : Fragment(), ViewCallBacks<QuestionResponce>,
     }
 
     override fun restoreFromCache(data: CacheProvider.CachedData) {
-        val allItems = ArrayList<Question>()
-        for (item in data.items) {
-            allItems.addAll(item.items)
-        }
         questionResponce = data.items.last()
         scrollListener.currentPage = data.latstPage
         recyclerView.post {
+            val allItems = ArrayList<Question>()
+            for (item in data.items) {
+                allItems.addAll(item.items)
+            }
             adapter.setItems(allItems)
         }
         Log.d(TAG, "Restored from cache")

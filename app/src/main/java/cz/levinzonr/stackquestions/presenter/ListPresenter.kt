@@ -55,7 +55,7 @@ class ListPresenter : Presenter<QuestionListFragment> {
                             Log.d(TAG, "Loading succes: $result")
                             Thread({
                                 cache.updateCache(pageToLoad, result)
-                            })
+                            }).start()
                             item = result
                         } else Log.d(TAG, "Result null")
                     }
