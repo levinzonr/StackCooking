@@ -1,7 +1,6 @@
 package cz.levinzonr.stackquestions.screens.questionslist
 
 
-import android.app.AlertDialog
 import android.content.Context
 import android.os.Bundle
 import android.support.v4.app.Fragment
@@ -20,7 +19,7 @@ import cz.levinzonr.stackquestions.model.QuestionResponce
 import cz.levinzonr.stackquestions.presenter.ListPresenter
 import cz.levinzonr.stackquestions.screens.ViewCallBacks
 import cz.levinzonr.stackquestions.screens.viewutils.InfiniteScrollListener
-import cz.levinzonr.trendee.screens.artistslist.VerticalSpaceDecoration
+import cz.levinzonr.stackquestions.screens.viewutils.VerticalSpaceDecoration
 
 
 /**

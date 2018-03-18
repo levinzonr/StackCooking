@@ -1,15 +1,9 @@
 package cz.levinzonr.stackquestions.screens
 
 import android.os.Bundle
-import android.os.PersistableBundle
-import android.support.design.widget.Snackbar
 import android.support.v4.app.FragmentTransaction
 import android.support.v7.app.AppCompatActivity
-import android.util.Log
-import android.view.Menu
-import android.view.MenuItem
 import android.view.View
-import android.widget.Toast
 import cz.levinzonr.stackquestions.R
 import cz.levinzonr.stackquestions.model.Question
 import cz.levinzonr.stackquestions.screens.questiondetail.QuestionDetailActivity

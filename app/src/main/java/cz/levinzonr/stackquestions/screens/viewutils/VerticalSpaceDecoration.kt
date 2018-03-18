@@ -1,4 +1,4 @@
-package cz.levinzonr.trendee.screens.artistslist
+package cz.levinzonr.stackquestions.screens.viewutils
 
 import android.graphics.Rect
 import android.support.v7.widget.RecyclerView

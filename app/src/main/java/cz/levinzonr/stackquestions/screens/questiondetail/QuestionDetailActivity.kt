@@ -3,7 +3,6 @@ package cz.levinzonr.stackquestions.screens.questiondetail
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
 import cz.levinzonr.stackquestions.R
 import cz.levinzonr.stackquestions.model.Question
