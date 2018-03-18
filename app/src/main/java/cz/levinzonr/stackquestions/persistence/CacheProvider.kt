@@ -11,8 +11,8 @@ import java.util.*
  * Created by nomers on 3/16/18.
  */
 class CacheProvider(val context: Context) {
-    val gson: Gson = Gson()
-    val dir: File = context.cacheDir
+    private val gson: Gson = Gson()
+    private val dir: File = context.cacheDir
     var cachedData: CachedData? = null
     init {
         val file = File(dir, FILE_NAME)

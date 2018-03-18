@@ -29,13 +29,13 @@ import cz.levinzonr.trendee.screens.artistslist.VerticalSpaceDecoration
 class QuestionListFragment : Fragment(), ViewCallBacks<QuestionResponce>,
         QuestionListAdapter.ItemClickListener, InfiniteScrollListener.InfiniteScrollCallbacks{
 
-    lateinit var presenter: ListPresenter
-    lateinit var adapter: QuestionListAdapter
-    lateinit var questionResponce: QuestionResponce
-    lateinit var recyclerView: RecyclerView
-    lateinit var listener: OnListFragmentInteractionListener
-    var savedPosition: Int? = null
-    lateinit var scrollListener: InfiniteScrollListener
+    private lateinit var presenter: ListPresenter
+    private lateinit var adapter: QuestionListAdapter
+    private lateinit var questionResponce: QuestionResponce
+    private lateinit var recyclerView: RecyclerView
+    private lateinit var listener: OnListFragmentInteractionListener
+    private var savedPosition: Int? = null
+    private lateinit var scrollListener: InfiniteScrollListener
 
     interface OnListFragmentInteractionListener {
         fun onQuestionSelected(question: Question)
@@ -106,7 +106,7 @@ class QuestionListFragment : Fragment(), ViewCallBacks<QuestionResponce>,
             presenter.getQuestionsPage(pageToLoad)
         } else {
             Log.d(TAG, "End of the list")
-            Toast.makeText(context, "End of the list", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, R.string.error_listend, Toast.LENGTH_SHORT).show()
         }
 
     }
