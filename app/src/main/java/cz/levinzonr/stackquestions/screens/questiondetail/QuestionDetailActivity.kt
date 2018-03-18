@@ -15,9 +15,11 @@ class QuestionDetailActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_question_detail)
         setSupportActionBar(toolbar)
-
-        mountDetailFragment(intent.getParcelableExtra(EXTRA_QUESTION))
-
+         mountDetailFragment(intent.getParcelableExtra(EXTRA_QUESTION))
+        supportActionBar!!.setDisplayHomeAsUpEnabled(true)
+        toolbar.setNavigationOnClickListener({
+                onBackPressed()
+            })
     }
 
     private fun mountDetailFragment(question: Question) {
