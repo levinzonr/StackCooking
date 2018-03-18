@@ -34,7 +34,7 @@ class QuestionListFragment : Fragment(), ViewCallBacks<QuestionResponce>,
     lateinit var questionResponce: QuestionResponce
     lateinit var recyclerView: RecyclerView
     lateinit var listener: OnListFragmentInteractionListener
-
+    var savedPosition: Int? = null
     lateinit var scrollListener: InfiniteScrollListener
 
     interface OnListFragmentInteractionListener {
@@ -44,6 +44,7 @@ class QuestionListFragment : Fragment(), ViewCallBacks<QuestionResponce>,
 
     companion object {
         const val TAG = "QuestionsListFragment"
+        const val SAVE_POS = "SavedScrollPosition"
         const val START_PAGE = 1
     }
 
@@ -62,6 +63,20 @@ class QuestionListFragment : Fragment(), ViewCallBacks<QuestionResponce>,
     override fun onAttach(context: Context?) {
         super.onAttach(context)
         listener = context as OnListFragmentInteractionListener
+    }
+
+    override fun onSaveInstanceState(outState: Bundle?) {
+        super.onSaveInstanceState(outState)
+        val manager = recyclerView.layoutManager as LinearLayoutManager
+        outState?.putInt(SAVE_POS, manager.findLastVisibleItemPosition())
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        if (savedInstanceState != null) {
+            savedPosition  = savedInstanceState.getInt(SAVE_POS)
+            Toast.makeText(context, savedPosition.toString(), Toast.LENGTH_SHORT).show()
+        }
     }
 
     override fun onItemSelected(question: Question) {
@@ -114,7 +129,9 @@ class QuestionListFragment : Fragment(), ViewCallBacks<QuestionResponce>,
             adapter.setItems(allItems)
         }
         Log.d(TAG, "Restored from cache")
-        Toast.makeText(context, "${data.latstPage} pages restored from cache", Toast.LENGTH_SHORT).show()
+        if (savedPosition != null) {
+            recyclerView.scrollToPosition(savedPosition!!)
+        }
     }
 
     override fun onLoadingFinished(result: QuestionResponce) {
